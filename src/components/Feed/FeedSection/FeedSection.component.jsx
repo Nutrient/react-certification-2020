@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
 import {
   Grid,
@@ -10,6 +10,7 @@ import {
 import { Star, StarBorder } from '@material-ui/icons';
 
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../../providers/Auth';
 
 import './FeedSection.styles.css';
 
@@ -17,7 +18,13 @@ import { FavoriteContext } from '../../../providers/Search';
 
 function FeedSection({ feed }) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
   const { addFavorite, removeFavorite, includesFavorite } = useContext(FavoriteContext);
+  const { authenticated } = useAuth();
+
+  useEffect(() => {
+    setIsLogged(authenticated);
+  }, [authenticated]);
 
   function favorite() {
     setIsFavorite(!isFavorite);
@@ -44,19 +51,23 @@ function FeedSection({ feed }) {
                   title={video.info.title}
                   className="FeedCardTileBar"
                   actionIcon={
-                    <IconButton onClick={favorite}>
-                      {includesFavorite(video.id) ? (
-                        <Star
-                          style={{ fill: 'white' }}
-                          onClick={() => removeFavorite(video.id)}
-                        />
-                      ) : (
-                        <StarBorder
-                          style={{ fill: 'white' }}
-                          onClick={() => addFavorite(video.id)}
-                        />
-                      )}
-                    </IconButton>
+                    isLogged ? (
+                      <IconButton onClick={favorite}>
+                        {includesFavorite(video.id) ? (
+                          <Star
+                            style={{ fill: 'white' }}
+                            onClick={() => removeFavorite(video.id)}
+                          />
+                        ) : (
+                          <StarBorder
+                            style={{ fill: 'white' }}
+                            onClick={() => addFavorite(video.id)}
+                          />
+                        )}
+                      </IconButton>
+                    ) : (
+                      <div />
+                    )
                   }
                 />
               </GridListTile>

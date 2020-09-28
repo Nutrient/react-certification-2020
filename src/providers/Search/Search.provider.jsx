@@ -117,7 +117,7 @@ function SearchProvider({ children }) {
   }
 
   function includesFavorite(videoId) {
-    return storage.get(CONTENT_USER_FAVORITES_KEY).includes(videoId);
+    return (storage.get(CONTENT_USER_FAVORITES_KEY) || []).includes(videoId);
   }
 
   return (

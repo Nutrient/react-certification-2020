@@ -48,6 +48,8 @@ function AuthProvider({ children }) {
   const logout = useCallback(() => {
     setAuthenticated(false);
     storage.set(AUTH_STORAGE_KEY, false);
+    storage.set(AUTH_USER_KEY, {});
+    storage.set(CONTENT_USER_FAVORITES_KEY, []);
   }, []);
 
   return (
