@@ -6,6 +6,7 @@ import { storage } from '../../utils/storage';
 const { REACT_APP_YOUTUBE_API_KEY } = process.env;
 
 export const SearchContext = React.createContext();
+export const FavoriteContext = React.createContext();
 
 function SearchProvider({ children }) {
   const categories = {
@@ -101,6 +102,24 @@ function SearchProvider({ children }) {
     return videoSearch.items.map((item) => ({ id: item.id.videoId, info: item.snippet }));
   };
 
+  function addFavorite(videoId) {
+    const favorites = storage.get(CONTENT_USER_FAVORITES_KEY);
+    favorites.push(videoId);
+    storage.set(CONTENT_USER_FAVORITES_KEY, favorites);
+  }
+
+  function removeFavorite(videoId) {
+    const favorites = storage
+      .get(CONTENT_USER_FAVORITES_KEY)
+      .filter((id) => id !== videoId);
+
+    storage.set(CONTENT_USER_FAVORITES_KEY, favorites);
+  }
+
+  function includesFavorite(videoId) {
+    return storage.get(CONTENT_USER_FAVORITES_KEY).includes(videoId);
+  }
+
   return (
     <SearchContext.Provider
       value={{
@@ -111,7 +130,9 @@ function SearchProvider({ children }) {
         getFavoriteVideos,
       }}
     >
-      {children}
+      <FavoriteContext.Provider value={{ addFavorite, removeFavorite, includesFavorite }}>
+        {children}
+      </FavoriteContext.Provider>
     </SearchContext.Provider>
   );
 }

@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 
-import { AUTH_STORAGE_KEY, AUTH_USER_KEY } from '../../utils/constants';
+import {
+  AUTH_STORAGE_KEY,
+  AUTH_USER_KEY,
+  CONTENT_USER_FAVORITES_KEY,
+} from '../../utils/constants';
 import { storage } from '../../utils/storage';
 
 const mockedUser = {
@@ -35,6 +39,7 @@ function AuthProvider({ children }) {
       setAuthenticated(true);
       storage.set(AUTH_STORAGE_KEY, true);
       storage.set(AUTH_USER_KEY, mockedUser);
+      storage.set(CONTENT_USER_FAVORITES_KEY, []);
       return true;
     }
     return false;

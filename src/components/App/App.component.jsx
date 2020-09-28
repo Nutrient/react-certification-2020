@@ -7,6 +7,7 @@ import AuthProvider from '../../providers/Auth';
 import HomePage from '../../pages/Home';
 import WatchPage from '../../pages/Watch';
 import SearchPage from '../../pages/Search';
+import FavoritesPage from '../../pages/Favorites';
 import NotFound from '../../pages/NotFound';
 import SearchProvider from '../../providers/Search';
 
@@ -19,6 +20,9 @@ function App() {
           <Switch>
             <Route exact path="/">
               <HomePage />
+            </Route>
+            <Route exact path="/favorites">
+              <FavoritesPage />
             </Route>
             <Route exact path="/search/:query">
               <SearchPage />

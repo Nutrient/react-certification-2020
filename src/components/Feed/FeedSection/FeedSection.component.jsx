@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import {
   Grid,
@@ -13,8 +13,11 @@ import { Link } from 'react-router-dom';
 
 import './FeedSection.styles.css';
 
+import { FavoriteContext } from '../../../providers/Search';
+
 function FeedSection({ feed }) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const { addFavorite, removeFavorite, includesFavorite } = useContext(FavoriteContext);
 
   function favorite() {
     setIsFavorite(!isFavorite);
@@ -29,24 +32,30 @@ function FeedSection({ feed }) {
         <Grid item md={12} className="FeedSectionCarrousel">
           <GridList md={12} className="FeedSectionCarrouselGrid" cols={4}>
             {feed.videos.map((video) => (
-              <Link to={`/watch/${video.id}`} className="FeedSectionTile">
-                <GridListTile key={video.id}>
+              <GridListTile key={video.id}>
+                <Link to={`/watch/${video.id}`} className="FeedSectionTile">
                   <img src={`${video.info.thumbnails.high.url}`} alt="" />
-                  <GridListTileBar
-                    title={video.info.title}
-                    className="FeedCardTileBar"
-                    actionIcon={
-                      <IconButton onClick={favorite}>
-                        {isFavorite ? (
-                          <Star style={{ fill: 'white' }} />
-                        ) : (
-                          <StarBorder style={{ fill: 'white' }} />
-                        )}
-                      </IconButton>
-                    }
-                  />
-                </GridListTile>
-              </Link>
+                </Link>
+                <GridListTileBar
+                  title={video.info.title}
+                  className="FeedCardTileBar"
+                  actionIcon={
+                    <IconButton onClick={favorite}>
+                      {includesFavorite(video.id) ? (
+                        <Star
+                          style={{ fill: 'white' }}
+                          onClick={() => removeFavorite(video.id)}
+                        />
+                      ) : (
+                        <StarBorder
+                          style={{ fill: 'white' }}
+                          onClick={() => addFavorite(video.id)}
+                        />
+                      )}
+                    </IconButton>
+                  }
+                />
+              </GridListTile>
             ))}
           </GridList>
         </Grid>
