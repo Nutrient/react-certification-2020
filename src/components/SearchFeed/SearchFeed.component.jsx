@@ -33,15 +33,15 @@ function SearchFeed({ query }) {
   }
 
   return (
-    <Grid container md={12} className="SearchFeedGrid">
+    <Grid container item md={12} className="SearchFeedGrid">
       <Grid item md={12}>
         <h3>Search results for: {query}</h3>
       </Grid>
       <Grid container item md={12} direction="row">
         <GridList cellHeight={180} cols={5} spacing={20}>
           {searchResult.map((video) => (
-            <Link to={`/watch/${video.id}`} class="SearchFeedGridLink">
-              <GridListTile cols={1} key={video.id} class="SearchFeedGridTile">
+            <Link to={`/watch/${video.id}`} className="SearchFeedGridLink">
+              <GridListTile cols={1} key={video.id} className="SearchFeedGridTile">
                 <img src={`${video.info.thumbnails.high.url}`} alt="" />
                 <GridListTileBar
                   title={video.info.title}
