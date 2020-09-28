@@ -99,7 +99,7 @@ function SearchProvider({ children }) {
 
     const videoSearch = await res.json();
 
-    return videoSearch.items.map((item) => ({ id: item.id.videoId, info: item.snippet }));
+    return videoSearch.items.map((item) => ({ id: item.id, info: item.snippet }));
   };
 
   function addFavorite(videoId) {
