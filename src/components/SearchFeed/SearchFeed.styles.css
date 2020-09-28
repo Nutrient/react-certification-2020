@@ -1,3 +1,14 @@
 .SearchFeedGrid {
     padding: 10px;
 }
+
+.SearchFeedGridLink {
+    max-width: 20%;
+    min-width: 20%;
+    height: inherit !important;
+}
+
+.SearchFeedGridTile {
+    width: 100%;
+    height: 100%;
+}
