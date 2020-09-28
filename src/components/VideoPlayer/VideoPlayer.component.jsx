@@ -4,12 +4,13 @@ import { Grid, IconButton } from '@material-ui/core';
 
 import { Star, StarBorder } from '@material-ui/icons';
 
-import { SearchContext } from '../../providers/Search';
+import { SearchContext, FavoriteContext } from '../../providers/Search';
 
 import './VideoPlayer.styles.css';
 
 function VideoPlayer({ videoId }) {
   const { getVideo } = useContext(SearchContext);
+  const { addFavorite, removeFavorite, includesFavorite } = useContext(FavoriteContext);
 
   const [video, setVideo] = useState({});
   const [isFavorite, setIsFavorite] = useState(false);
@@ -44,7 +45,11 @@ function VideoPlayer({ videoId }) {
         <Grid container item md={2} justify="flex-end">
           <Grid>
             <IconButton onClick={favorite}>
-              {isFavorite ? <Star /> : <StarBorder />}
+              {includesFavorite(videoId) ? (
+                <Star onClick={() => removeFavorite(videoId)} />
+              ) : (
+                <StarBorder onClick={() => addFavorite(videoId)} />
+              )}
             </IconButton>
           </Grid>
         </Grid>

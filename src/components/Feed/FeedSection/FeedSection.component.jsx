@@ -34,7 +34,11 @@ function FeedSection({ feed }) {
             {feed.videos.map((video) => (
               <GridListTile key={video.id}>
                 <Link to={`/watch/${video.id}`} className="FeedSectionTile">
-                  <img src={`${video.info.thumbnails.high.url}`} alt="" />
+                  <img
+                    src={`${video.info.thumbnails.high.url}`}
+                    alt=""
+                    className="FeedVideoImg"
+                  />
                 </Link>
                 <GridListTileBar
                   title={video.info.title}
