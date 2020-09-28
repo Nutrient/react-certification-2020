@@ -21,3 +21,8 @@
 .NavbarSearchIconColor {
     color: ivory;
 }
+
+.NavBarAvatar {
+    border-radius: 50%;
+    width: 40px;
+}

@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 
-import { AUTH_STORAGE_KEY } from '../../utils/constants';
+import { AUTH_STORAGE_KEY, AUTH_USER_KEY } from '../../utils/constants';
 import { storage } from '../../utils/storage';
+
+const mockedUser = {
+  id: '123',
+  name: 'Wizeline',
+  avatarUrl:
+    'https://media.glassdoor.com/sqll/868055/wizeline-squarelogo-1473976610815.png',
+};
 
 const AuthContext = React.createContext(null);
 
@@ -23,9 +30,14 @@ function AuthProvider({ children }) {
     setAuthenticated(isAuthenticated);
   }, []);
 
-  const login = useCallback(() => {
-    setAuthenticated(true);
-    storage.set(AUTH_STORAGE_KEY, true);
+  const login = useCallback((username, password) => {
+    if (username === 'wizeline' && password === 'Rocks!') {
+      setAuthenticated(true);
+      storage.set(AUTH_STORAGE_KEY, true);
+      storage.set(AUTH_USER_KEY, mockedUser);
+      return true;
+    }
+    return false;
   }, []);
 
   const logout = useCallback(() => {

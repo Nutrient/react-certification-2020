@@ -1,0 +1,38 @@
+.LoginModal{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    
+}
+
+.LoginModalContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50%;
+}
+
+.LoginModalCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    width: 50%;
+    padding: 20px;
+}
+
+.ModalInput{
+    border-radius: 5px;
+    font-size: 1.2rem;
+    height: 20%;
+    margin: 5px;
+}
+
+.LoginModalButton {
+    background-color: lightblue !important;
+}
+.LoginModalButton:hover {
+    background-color: aquamarine !important;
+}

@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { CONTENT_USER_FAVORITES_KEY } from '../../utils/constants';
+import { storage } from '../../utils/storage';
+
 const { REACT_APP_YOUTUBE_API_KEY } = process.env;
 
 export const SearchContext = React.createContext();
@@ -84,9 +87,29 @@ function SearchProvider({ children }) {
     return videoSearch.items.map((item) => ({ id: item.id.videoId, info: item.snippet }));
   };
 
+  const getFavoriteVideos = async () => {
+    const favoriteList = storage.get(CONTENT_USER_FAVORITES_KEY);
+
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?id=${favoriteList.join(
+        ','
+      )}&part=snippet&key=${REACT_APP_YOUTUBE_API_KEY}&maxResults=50`
+    );
+
+    const videoSearch = await res.json();
+
+    return videoSearch.items.map((item) => ({ id: item.id.videoId, info: item.snippet }));
+  };
+
   return (
     <SearchContext.Provider
-      value={{ getCategoryFeed, getVideo, getRelatedVideos, getVideoSearch }}
+      value={{
+        getCategoryFeed,
+        getVideo,
+        getRelatedVideos,
+        getVideoSearch,
+        getFavoriteVideos,
+      }}
     >
       {children}
     </SearchContext.Provider>

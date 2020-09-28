@@ -1,14 +1,22 @@
-import React, { createRef } from 'react';
+import React, { useState, createRef } from 'react';
 import { useHistory } from 'react-router';
 
 import { Grid, Button, IconButton } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 
+import LoginModal from '../../modals/Login';
+import { AUTH_USER_KEY } from '../../utils/constants';
+import { storage } from '../../utils/storage';
+
 import './Navbar.styles.css';
 
 function Navbar() {
+  const [open, setOpen] = useState(false);
+
   const history = useHistory();
   const searchRef = createRef();
+
+  const userInfo = storage.get(AUTH_USER_KEY);
 
   function search(query) {
     if (query && query !== '') {
@@ -25,6 +33,14 @@ function Navbar() {
   function handleIconClick() {
     search(searchRef.current.value);
   }
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Grid container item alignItems="center" className="NavbarContainer">
@@ -52,9 +68,16 @@ function Navbar() {
         </Grid>
       </Grid>
       <Grid container item md={2} justify="flex-end" alignItems="center" spacing={8}>
-        <Button variant="contained" size="small">
-          Login
-        </Button>
+        {userInfo ? (
+          <img src={userInfo.avatarUrl} alt={userInfo.name} className="NavBarAvatar" />
+        ) : (
+          <div>
+            <Button variant="contained" size="small" onClick={handleOpen}>
+              Login
+            </Button>
+            <LoginModal open={open} handleClose={handleClose} />
+          </div>
+        )}
       </Grid>
     </Grid>
   );

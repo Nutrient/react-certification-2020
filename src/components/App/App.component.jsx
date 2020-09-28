@@ -5,7 +5,6 @@ import Navbar from '../Navbar';
 
 import AuthProvider from '../../providers/Auth';
 import HomePage from '../../pages/Home';
-import LoginPage from '../../pages/Login';
 import WatchPage from '../../pages/Watch';
 import SearchPage from '../../pages/Search';
 import NotFound from '../../pages/NotFound';
@@ -20,9 +19,6 @@ function App() {
           <Switch>
             <Route exact path="/">
               <HomePage />
-            </Route>
-            <Route exact path="/login">
-              <LoginPage />
             </Route>
             <Route exact path="/search/:query">
               <SearchPage />
