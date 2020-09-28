@@ -1,0 +1,23 @@
+.NavbarContainer {
+    background-color: #7253A3;
+    width: 100%;
+    height: 70px;
+    color: ivory;
+}
+
+.NavBarTitle {
+    font-size: 2rem;
+}
+.NavBarInput {
+    height: 30px ;
+    width: 100%;
+}
+
+.NavbarSearchIcon {
+    height: 50%;
+    width: fit-content;
+}
+
+.NavbarSearchIconColor {
+    color: ivory;
+}
