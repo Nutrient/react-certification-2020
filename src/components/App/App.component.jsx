@@ -10,6 +10,7 @@ import SearchPage from '../../pages/Search';
 import FavoritesPage from '../../pages/Favorites';
 import NotFound from '../../pages/NotFound';
 import SearchProvider from '../../providers/Search';
+import PrivateRoute from '../PrivateRoute';
 
 function App() {
   return (
@@ -21,15 +22,15 @@ function App() {
             <Route exact path="/">
               <HomePage />
             </Route>
-            <Route exact path="/favorites">
+            <PrivateRoute exact path="/favorites">
               <FavoritesPage />
-            </Route>
-            <Route exact path="/search/:query">
+            </PrivateRoute>
+            <PrivateRoute exact path="/search/:query">
               <SearchPage />
-            </Route>
-            <Route exact path="/watch/:id">
+            </PrivateRoute>
+            <PrivateRoute exact path="/watch/:id">
               <WatchPage />
-            </Route>
+            </PrivateRoute>
             <Route path="*">
               <NotFound />
             </Route>
