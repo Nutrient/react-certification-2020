@@ -77,7 +77,7 @@ function Navbar() {
         </Grid>
       </Grid>
       <Grid container item md={2} justify="flex-end" alignItems="center" spacing={8}>
-        {isLogged ? (
+        {isLogged && userInfo ? (
           <Grid container item md={12} justify="center" alignItems="center">
             <Grid
               container
