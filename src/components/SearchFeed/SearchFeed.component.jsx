@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -14,24 +14,24 @@ import { SearchContext, FavoriteContext } from '../../providers/Search';
 
 import './SearchFeed.styles.css';
 
-function SearchFeed({ query }) {
-  const [searchResult, setSearchResult] = useState([]);
-  const [isFavorite, setIsFavorite] = useState(false);
+import Types from '../../utils/actionTypes';
 
-  const { getVideoSearch } = useContext(SearchContext);
-  const { addFavorite, removeFavorite, includesFavorite } = useContext(FavoriteContext);
+import { getVideoSearch } from '../../api/youtubeApi';
+
+function SearchFeed({ query }) {
+  const { searchState, searchDispatch } = useContext(SearchContext);
+  const { favoriteDispatch, includesFavorite } = useContext(FavoriteContext);
 
   useEffect(() => {
     const search = async () => {
-      setSearchResult(await getVideoSearch(query));
+      searchDispatch({
+        type: Types.SEARCH_FEED,
+        searchFeed: await getVideoSearch(query),
+      });
     };
 
     search();
-  }, [getVideoSearch, query]);
-
-  function favorite() {
-    setIsFavorite(!isFavorite);
-  }
+  }, [query]);
 
   return (
     <Grid container item md={12} className="SearchFeedGrid">
@@ -40,7 +40,7 @@ function SearchFeed({ query }) {
       </Grid>
       <Grid container item md={12} direction="row">
         <GridList cellHeight={180} cols={5} spacing={20}>
-          {searchResult.map((video) => (
+          {searchState.searchFeed.map((video) => (
             <GridListTile cols={1} key={video.id} className="SearchFeedGridTile">
               <Link to={`/watch/${video.id}`} className="SearchFeedGridLink">
                 <img
@@ -52,16 +52,23 @@ function SearchFeed({ query }) {
               <GridListTileBar
                 title={video.info.title}
                 actionIcon={
-                  <IconButton onClick={favorite}>
+                  <IconButton>
                     {includesFavorite(video.id) ? (
                       <Star
                         style={{ fill: 'white' }}
-                        onClick={() => removeFavorite(video.id)}
+                        onClick={() =>
+                          favoriteDispatch({
+                            type: Types.REMOVE_FAVORITE,
+                            id: video.id,
+                          })
+                        }
                       />
                     ) : (
                       <StarBorder
                         style={{ fill: 'white' }}
-                        onClick={() => addFavorite(video.id)}
+                        onClick={() =>
+                          favoriteDispatch({ type: Types.ADD_FAVORITE, id: video.id })
+                        }
                       />
                     )}
                   </IconButton>

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { Grid } from '@material-ui/core';
 import FeedSection from './FeedSection';
@@ -9,9 +9,12 @@ import { YOUTUBE_API_CATEGORY_VALUES } from '../../utils/constants';
 
 import './Feed.styles.css';
 
+import { getCategoryFeed } from '../../api/youtubeApi';
+
+import Types from '../../utils/actionTypes';
+
 function Feed() {
-  const [categoryFeed, setCategoryFeed] = useState([]);
-  const { getCategoryFeed } = useContext(SearchContext);
+  const { searchState, searchDispatch } = useContext(SearchContext);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -22,16 +25,16 @@ function Feed() {
       categories.push(
         await getCategoryFeed(YOUTUBE_API_CATEGORY_VALUES.PETS_AND_ANIMALS)
       );
-      setCategoryFeed(categories);
+      searchDispatch({ type: Types.MAIN_FEED, feed: categories });
     };
-
+    console.log('test');
     getCategories();
-  }, [getCategoryFeed]);
+  }, []);
 
   return (
     <Grid container style={{ padding: '10px' }}>
       <Grid item md={12}>
-        {categoryFeed.map((feed) => (
+        {searchState.feed.map((feed) => (
           <FeedSection key={feed.id} feed={feed} />
         ))}
       </Grid>

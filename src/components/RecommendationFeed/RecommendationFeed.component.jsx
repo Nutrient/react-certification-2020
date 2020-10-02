@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import {
   Grid,
@@ -15,23 +15,23 @@ import { SearchContext, FavoriteContext } from '../../providers/Search';
 
 import './RecommendationFeed.styles.css';
 
+import Types from '../../utils/actionTypes';
+
+import { getRelatedVideos } from '../../api/youtubeApi';
+
 function RecommendationFeed({ videoId }) {
-  const { getRelatedVideos } = useContext(SearchContext);
-  const { addFavorite, removeFavorite, includesFavorite } = useContext(FavoriteContext);
-
-  const [relatedVideos, setRelatedVideos] = useState([]);
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  function favorite() {
-    setIsFavorite(!isFavorite);
-  }
+  const { searchState, searchDispatch } = useContext(SearchContext);
+  const { favoriteDispatch, includesFavorite } = useContext(FavoriteContext);
 
   useEffect(() => {
     const fetchRelatedVideos = async () => {
-      setRelatedVideos(await getRelatedVideos(videoId));
+      searchDispatch({
+        type: Types.RELATED_FEED,
+        relatedVideos: await getRelatedVideos(videoId),
+      });
     };
     fetchRelatedVideos();
-  }, [getRelatedVideos, videoId]);
+  }, []);
 
   return (
     <Grid container item md={12} direction="column">
@@ -39,7 +39,7 @@ function RecommendationFeed({ videoId }) {
         <GridListTile key="Subheader" cols={1} style={{ height: 'auto' }}>
           <h3>Suggestion Feed</h3>
         </GridListTile>
-        {relatedVideos.map((video) => (
+        {searchState.relatedVideos.map((video) => (
           <GridListTile cols={1} key={video.id} className="RecommendationFeedTile">
             <Link to={`/watch/${video.id}`} className="RecommendationFeedLink">
               <img
@@ -51,16 +51,23 @@ function RecommendationFeed({ videoId }) {
             <GridListTileBar
               title={video.info.title}
               actionIcon={
-                <IconButton onClick={favorite}>
+                <IconButton>
                   {includesFavorite(video.id) ? (
                     <Star
                       style={{ fill: 'white' }}
-                      onClick={() => removeFavorite(video.id)}
+                      onClick={() =>
+                        favoriteDispatch({
+                          type: Types.REMOVE_FAVORITE,
+                          id: video.id,
+                        })
+                      }
                     />
                   ) : (
                     <StarBorder
                       style={{ fill: 'white' }}
-                      onClick={() => addFavorite(video.id)}
+                      onClick={() =>
+                        favoriteDispatch({ type: Types.ADD_FAVORITE, id: video.id })
+                      }
                     />
                   )}
                 </IconButton>

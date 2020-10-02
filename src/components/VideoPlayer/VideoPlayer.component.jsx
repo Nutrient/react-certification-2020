@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 
 import { Grid, IconButton } from '@material-ui/core';
 
@@ -7,24 +7,20 @@ import { Star, StarBorder } from '@material-ui/icons';
 import { SearchContext, FavoriteContext } from '../../providers/Search';
 
 import './VideoPlayer.styles.css';
+import Types from '../../utils/actionTypes';
+
+import { getVideo } from '../../api/youtubeApi';
 
 function VideoPlayer({ videoId }) {
-  const { getVideo } = useContext(SearchContext);
-  const { addFavorite, removeFavorite, includesFavorite } = useContext(FavoriteContext);
-
-  const [video, setVideo] = useState({});
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  function favorite() {
-    setIsFavorite(!isFavorite);
-  }
+  const { searchDispatch, searchState } = useContext(SearchContext);
+  const { favoriteDispatch, includesFavorite } = useContext(FavoriteContext);
 
   useEffect(() => {
     const fetchVideo = async () => {
-      setVideo(await getVideo(videoId));
+      searchDispatch({ type: Types.GET_VIDEO, video: await getVideo(videoId) });
     };
     fetchVideo();
-  }, [getVideo, videoId]);
+  }, [videoId]);
 
   return (
     <Grid container md={12} direction="column">
@@ -40,15 +36,29 @@ function VideoPlayer({ videoId }) {
       </Grid>
       <Grid container item md={12} alignItems="center">
         <Grid item md={10}>
-          <h3>{video.title}</h3>
+          <h3>{searchState.currentVideo.title}</h3>
         </Grid>
         <Grid container item md={2} justify="flex-end">
           <Grid>
-            <IconButton onClick={favorite}>
+            <IconButton>
               {includesFavorite(videoId) ? (
-                <Star onClick={() => removeFavorite(videoId)} />
+                <Star
+                  onClick={() =>
+                    favoriteDispatch({
+                      type: Types.REMOVE_FAVORITE,
+                      id: videoId,
+                    })
+                  }
+                />
               ) : (
-                <StarBorder onClick={() => addFavorite(videoId)} />
+                <StarBorder
+                  onClick={() =>
+                    favoriteDispatch({
+                      type: Types.ADD_FAVORITE,
+                      id: videoId,
+                    })
+                  }
+                />
               )}
             </IconButton>
           </Grid>

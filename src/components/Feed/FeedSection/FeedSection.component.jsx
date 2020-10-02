@@ -16,19 +16,18 @@ import './FeedSection.styles.css';
 
 import { FavoriteContext } from '../../../providers/Search';
 
+import Types from '../../../utils/actionTypes';
+
 function FeedSection({ feed }) {
-  const [isFavorite, setIsFavorite] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
-  const { addFavorite, removeFavorite, includesFavorite } = useContext(FavoriteContext);
+
+  const { includesFavorite, favoriteDispatch } = useContext(FavoriteContext);
   const { authenticated } = useAuth();
 
   useEffect(() => {
     setIsLogged(authenticated);
   }, [authenticated]);
 
-  function favorite() {
-    setIsFavorite(!isFavorite);
-  }
   return (
     <Grid container>
       <Grid container item md={12} justify="flex-start">
@@ -52,16 +51,23 @@ function FeedSection({ feed }) {
                   className="FeedCardTileBar"
                   actionIcon={
                     isLogged ? (
-                      <IconButton onClick={favorite}>
+                      <IconButton>
                         {includesFavorite(video.id) ? (
                           <Star
                             style={{ fill: 'white' }}
-                            onClick={() => removeFavorite(video.id)}
+                            onClick={() =>
+                              favoriteDispatch({
+                                type: Types.REMOVE_FAVORITE,
+                                id: video.id,
+                              })
+                            }
                           />
                         ) : (
                           <StarBorder
                             style={{ fill: 'white' }}
-                            onClick={() => addFavorite(video.id)}
+                            onClick={() =>
+                              favoriteDispatch({ type: Types.ADD_FAVORITE, id: video.id })
+                            }
                           />
                         )}
                       </IconButton>
