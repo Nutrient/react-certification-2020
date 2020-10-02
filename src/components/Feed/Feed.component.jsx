@@ -27,7 +27,6 @@ function Feed() {
       );
       searchDispatch({ type: Types.MAIN_FEED, feed: categories });
     };
-    console.log('test');
     getCategories();
   }, []);
 
