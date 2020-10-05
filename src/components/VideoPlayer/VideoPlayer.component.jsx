@@ -23,7 +23,7 @@ function VideoPlayer({ videoId }) {
   }, [videoId]);
 
   return (
-    <Grid container md={12} direction="column">
+    <Grid container item md={12} direction="column">
       <Grid item md={12}>
         <iframe
           title="video"
@@ -40,26 +40,17 @@ function VideoPlayer({ videoId }) {
         </Grid>
         <Grid container item md={2} justify="flex-end">
           <Grid>
-            <IconButton>
-              {includesFavorite(videoId) ? (
-                <Star
-                  onClick={() =>
-                    favoriteDispatch({
-                      type: Types.REMOVE_FAVORITE,
-                      id: videoId,
-                    })
-                  }
-                />
-              ) : (
-                <StarBorder
-                  onClick={() =>
-                    favoriteDispatch({
-                      type: Types.ADD_FAVORITE,
-                      id: videoId,
-                    })
-                  }
-                />
-              )}
+            <IconButton
+              onClick={() =>
+                favoriteDispatch({
+                  type: includesFavorite(videoId)
+                    ? Types.REMOVE_FAVORITE
+                    : Types.ADD_FAVORITE,
+                  id: videoId,
+                })
+              }
+            >
+              {includesFavorite(videoId) ? <Star /> : <StarBorder />}
             </IconButton>
           </Grid>
         </Grid>

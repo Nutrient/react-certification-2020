@@ -51,24 +51,20 @@ function RecommendationFeed({ videoId }) {
             <GridListTileBar
               title={video.info.title}
               actionIcon={
-                <IconButton>
+                <IconButton
+                  onClick={() =>
+                    favoriteDispatch({
+                      type: includesFavorite(video.id)
+                        ? Types.REMOVE_FAVORITE
+                        : Types.ADD_FAVORITE,
+                      id: video.id,
+                    })
+                  }
+                >
                   {includesFavorite(video.id) ? (
-                    <Star
-                      style={{ fill: 'white' }}
-                      onClick={() =>
-                        favoriteDispatch({
-                          type: Types.REMOVE_FAVORITE,
-                          id: video.id,
-                        })
-                      }
-                    />
+                    <Star style={{ fill: 'white' }} />
                   ) : (
-                    <StarBorder
-                      style={{ fill: 'white' }}
-                      onClick={() =>
-                        favoriteDispatch({ type: Types.ADD_FAVORITE, id: video.id })
-                      }
-                    />
+                    <StarBorder style={{ fill: 'white' }} />
                   )}
                 </IconButton>
               }

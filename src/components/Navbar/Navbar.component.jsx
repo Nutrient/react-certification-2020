@@ -72,7 +72,7 @@ function Navbar() {
             className="NavbarSearchIcon"
             onClick={handleIconClick}
           >
-            <SearchIcon className="NavbarSearchIconColor" />
+            <SearchIcon title="search" className="NavbarSearchIconColor" />
           </IconButton>
         </Grid>
       </Grid>
